@@ -1,24 +1,10 @@
 // popup.js
 
-// Function to fetch car images from the CarsXE API
+// Function to fetch car images from your backend server
 async function fetchCarImg() {
-  const apiKey = '47gs2rinj_cai667zpl_ey2o4qbsv'
-  const query = 'car' // You can replace this with specific car details if needed
-
   try {
-    const response = await fetch(
-      `https://api.carsxe.com/images?apiKey=${apiKey}&query=${encodeURIComponent(
-        query
-      )}`,
-      { mode: 'cors' } // Add the 'mode: cors' option to handle CORS issues
-    )
-
-    if (!response.ok) {
-      throw new Error('Unable to fetch car images')
-    }
-
+    const response = await fetch('http://localhost:3000/getCarImages')
     const data = await response.json()
-    console.log('Fetched car images:', data)
 
     // Process the car images if needed and update the DOM
     const carImagesDiv = document.getElementById('carImages')

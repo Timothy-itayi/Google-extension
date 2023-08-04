@@ -3,7 +3,7 @@
 // Function to fetch weather data from the weather API
 async function fetchWeatherData() {
   const apiUrl =
-    'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&current_weather=true'
+    'https://api.open-meteo.com/v1/forecast?latitude=-36.8485&longitude=174.7633&hourly=temperature_2m&current_weather=true&timezone=Pacific%2FAuckland&models=best_match'
 
   try {
     const response = await fetch(apiUrl)
@@ -13,24 +13,35 @@ async function fetchWeatherData() {
     const weatherInfoDiv = document.getElementById('weatherInfo')
     weatherInfoDiv.innerHTML = '<h2>Weather Information</h2>'
 
-    // Check if the data contains the hourly key and it is an object with time and temperature_2m properties
-    if (
-      data.hasOwnProperty('hourly') &&
-      data.hourly.hasOwnProperty('time') &&
-      data.hourly.hasOwnProperty('temperature_2m')
-    ) {
-      const hourlyTime = data.hourly.time
-      const hourlyTemperature = data.hourly.temperature_2m
+    // Check if the data contains the current_weather key
+    if (data.hasOwnProperty('current_weather')) {
+      const currentTimeISO = data.current_weather.time // Get the current time in ISO8601 format
+      const currentTimezone = data.timezone_abbreviation // Get the time zone abbreviation
 
-      // Display hourly time and temperature
-      for (let i = 0; i < hourlyTime.length; i++) {
-        const time = new Date(hourlyTime[i]).toLocaleTimeString()
-        const temperature = hourlyTemperature[i]
-        weatherInfoDiv.innerHTML += `
-          <p>Time: ${time}</p>
-          <p>Temperature: ${temperature} °C</p>
-        `
+      // Define a mapping of time zone abbreviations to their full names
+      const timezoneMapping = {
+        NZST: 'New Zealand Standard Time',
+        // Add more mappings as needed
       }
+
+      // Get the full time zone name from the mapping
+      const timezoneFullName =
+        timezoneMapping[currentTimezone] || currentTimezone
+
+      // Convert the ISO8601 time string to the local time zone time
+      const currentTime = new Date(currentTimeISO).toLocaleTimeString(
+        undefined,
+        { timeZoneName: 'long', hour12: false }
+      )
+
+      // Display the current time and temperature
+      const currentTemperature = data.current_weather.temperature
+      weatherInfoDiv.innerHTML += `
+        <p>Time: ${currentTime} (${timezoneFullName})</p>
+        <p>Temperature: ${currentTemperature.toFixed(
+          1
+        )} &deg;C</p> <!-- Using &deg; for the degree symbol -->
+      `
     } else {
       console.error('Invalid weather data format:', data)
     }

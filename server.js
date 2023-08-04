@@ -1,55 +1,50 @@
 // server.js
+const express = require('express');
+const app = express();
+const fetch = require('node-fetch');
 
-const express = require('express')
-let fetch
-;(async () => {
-  const nodeFetch = await import('node-fetch')
-  fetch = nodeFetch.default
 
-  app.listen(port, () => {
-    console.log(`Server running on http://localhost;${port}`)
-  })
-})()
-const app = express()
-const port = 3000 // You can use any available port you prefer
-const { identifyCarInImage } = require('./js/fetchcar.js')
-// Middleware to parse JSON body of incoming requests
-app.use(express.json())
+const apiUrl = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&current_weather=true';
 
-// Endpoint to fetch car images from the CarsXE API
-app.get('/', async (_req, res) => {
-  const apiKey = '47gs2rinj_cai667zpl_ey2o4qbsv' // Replace with your CarsXE API key
-  const query = 'car' // You can replace this with specific car details if needed
-
+async function fetchWeatherData() {
   try {
-    const response = await fetch(
-      `http://api.carsxe.com/images?apiKey=${apiKey}&query=${encodeURIComponent(
-        query
-      )}`
-    )
+    const response = await fetch(apiUrl);
+    const weatherData = await response.json();
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch car images')
-    }
+    // Extract time and temperature data from the API response
+    const timeArray = weatherData.hourly.time;
+    const temperatureArray = weatherData.hourly.temperature_2m;
 
-    const data = await response.json()
-    res.json(data)
+    // Log the data for debugging (you can remove this in production)
+    console.log('Time Array:', timeArray);
+    console.log('Temperature Array:', temperatureArray);
+
+    // You can send the data to the Chrome extension here
+    // For simplicity, let's just send the first hour's data as an example
+    const firstHourTime = timeArray[0];
+    const firstHourTemperature = temperatureArray[0];
+
+    // Log the first hour's time and temperature (you can remove this in production)
+    console.log('First Hour Time:', firstHourTime);
+    console.log('First Hour Temperature:', firstHourTemperature);
+
+    // Send the data to the Chrome extension (replace this with your logic)
+    // res.send({ time: firstHourTime, temperature: firstHourTemperature });
+
   } catch (error) {
-    console.error('Error fetching car images:', error)
-    res
-      .status(500)
-      .json({ error: 'An error occurred while fetching car images' })
+    console.error('Error fetching weather data:', error);
+    // res.status(500).send('Error fetching weather data');
   }
-}),
-  app.post('/getCarImages', async (req, res) => {
-    const imageUrl = req.body.imageUrl // Assuming the image URL is sent in the request body
+}
 
-    try {
-      const vehicleInfo = awaitidentifyCarInImage(imageUrl).res.json(vehicleInfo)
-    } catch (error) {
-      console.error('Error identifying the vehicle:', error)
-      res
-        .status(500)
-        .json({ error: 'An error occurred while identifying the vehicle' })
-    }
-  })
+// Route to fetch weather data
+app.get('/getWeatherData', async (req, res) => {
+  await fetchWeatherData();
+  res.send('Weather data fetched. Check the server console for details.');
+});
+
+// Start the server
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});

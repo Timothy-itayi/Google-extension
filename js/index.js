@@ -1,26 +1,26 @@
-// popup.js
+// index.js
 
-// Function to fetch car images from your backend server
-async function fetchCarImg() {
+// Function to fetch weather data from your backend server
+async function fetchWeatherData() {
   try {
-    const response = await fetch('http://localhost:3000/getCarImages')
+    const response = await fetch('http://localhost:3000/getWeatherData')
     const data = await response.json()
 
-    // Process the car images if needed and update the DOM
-    const carImagesDiv = document.getElementById('carImages')
-    carImagesDiv.innerHTML = '<h2>Car Images</h2>'
+    // Process the weather data if needed and update the DOM
+    const weatherInfoDiv = document.getElementById('weatherInfo')
+    weatherInfoDiv.innerHTML = '<h2>Weather Information</h2>'
 
-    // Example: Display the first three car images
-    const carImages = data.images.slice(0, 3)
-    carImages.forEach((image) => {
-      carImagesDiv.innerHTML += `
-        <img src="${image.url}" alt="${image.alt}" style="width: 200px; height: 150px;">
-      `
-    })
+    // Example: Display the first hour's time and temperature
+    const time = data.time
+    const temperature = data.temperature
+    weatherInfoDiv.innerHTML += `
+      <p>Time: ${time}</p>
+      <p>Temperature: ${temperature} °C</p>
+    `
   } catch (error) {
-    console.error('Error fetching car images:', error)
+    console.error('Error fetching weather data:', error)
   }
 }
 
-// Call the fetchCarImg function to get car images when the popup is loaded
-document.addEventListener('DOMContentLoaded', fetchCarImg)
+// Call the fetchWeatherData function to get weather data when the popup is loaded
+document.addEventListener('DOMContentLoaded', fetchWeatherData)

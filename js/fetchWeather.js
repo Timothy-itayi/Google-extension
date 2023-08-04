@@ -2,7 +2,7 @@
 
 async function fetchWeatherData() {
   const apiUrl =
-    'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&current_weather=true'
+    'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&current_weather=true&timezone=Pacific%2FAuckland&models=best_match'
 
   try {
     const response = await fetch(apiUrl)

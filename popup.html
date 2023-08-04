@@ -1,12 +1,33 @@
-<!-- popup.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>My Chrome Extension</title>
-  <script src="./js/index.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    h2 {
+      color: #007bff;
+    }
+
+    p {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    /* You can add more styles as needed */
+  </style>
 </head>
 <body>
-  <div id="weatherInfo"></div>
+  <!-- Your popup content here -->
+  <div id="weatherInfo">
+    <h2>Weather Information</h2>
+    <p>Time: <span id="time"></span></p>
+    <p>Temperature: <span id="temperature"></span></p>
+  </div>
+
+  <script src="js/index.js"></script>
 </body>
 </html>

@@ -1,32 +1,19 @@
 <!DOCTYPE html>
 <html>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons&display=block">
+  <link rel="stylesheet" href="style.css">
 <head>
   <title>My Chrome Extension</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-
-    h2 {
-      color: #007bff;
-    }
-
-    p {
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    /* You can add more styles as needed */
-  </style>
+ 
 </head>
 <body>
   <!-- Your popup content here -->
-  <div id="weatherInfo">
+  <div id="weatherInfo" class="weather-container">
     <h2>Weather Information</h2>
     <p>Time: <span id="time"></span></p>
     <p>Temperature: <span id="temperature"></span></p>
   </div>
+  <script src="js/skycons.js"></script>
 
   <script src="js/index.js"></script>
 </body>
